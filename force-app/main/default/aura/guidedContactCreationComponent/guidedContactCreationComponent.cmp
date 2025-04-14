@@ -1,0 +1,95 @@
+<aura:component
+    implements="lightning:availableForFlowScreens,force:lightningQuickAction,force:appHostable,force:hasRecordId,lightning:hasPageReference,lightning:isUrlAddressable"
+    access="global" controller="CommunityUtils">
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:attribute name="fromAccount" type="Boolean" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="accountName" type="String" />
+    <aura:attribute name="showAccountDropDown" type="Boolean" default="false" />
+    <aura:attribute name="disableButton" type="Boolean" default="true" />
+    <aura:attribute name="showSelectAccount" type="Boolean" default="true" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="aura:locationChange" action="{!c.destroyComponent}" />
+
+    <aura:attribute name="accountsOptions" type="List" default="[]" />
+
+    <aura:renderIf isTrue="{!v.showSelectAccount}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <lightning:recordEditForm aura:id="recordEditForm">
+                </lightning:recordEditForm>
+                <div class="slds-modal__header">
+                    <h2 class="slds-text-heading--medium">Select Account</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium slds-grid slds-wrap slds-is-relative"
+                    style="height: 300px">
+                    <aura:renderIf isTrue="{!v.showSpinner}">
+                        <div>
+                            <lightning:spinner alternativeText="Loading" size="medium" variant="brand" />
+                        </div>
+                    </aura:renderIf>
+                    <div class="slds-form-element slds-p-top_small slds-align_absolute-center slds-large-size_2-of-3"
+                        style="display: block!important;">
+                        <label class="slds-form-element__label" for="combobox-id-11"
+                            id="combobox-label-id-131">Account</label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-combobox_container">
+                                <div class="slds-combobox slds-dropdown-trigger">
+                                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                        role="none" onmouseover="{!c.handleChangeShowAccountDropDown}">
+                                        <lightning:input disabled="{!v.fromAccount}" variant="label-hidden"
+                                            aura:id="accountName" type="text" id="combobox-id-11"
+                                            aria-autocomplete="list" aria-controls="listbox-id-9" aria-expanded="false"
+                                            aria-haspopup="listbox" autocomplete="off" role="combobox"
+                                            onchange="{!c.handleChangeAccountName}" placeholder="Search..." />
+                                        <span
+                                            class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                            <lightning:icon iconName="utility:search" size="x-small"></lightning:icon>
+                                        </span>
+                                    </div>
+                                    <aura:if isTrue="{!and(not(v.fromAccount),v.showAccountDropDown)}">
+                                        <div id="listbox-id-9"
+                                            class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+                                            role="listbox">
+                                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                <aura:iteration items="{!v.accountsOptions}" var="account">
+                                                    <aura:if isTrue="{!account.show}">
+                                                        <li id="{!account.value}" role="presentation"
+                                                            class="slds-listbox__item">
+                                                            <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                                                data-name="{!account.label}" data-key="{!account.value}"
+                                                                role="option" onclick="{!c.handleClickChangeAccount}">
+                                                                <span
+                                                                    class="slds-media__figure slds-listbox__option-icon"></span>
+                                                                <span class="slds-media__body">
+                                                                    <span class="slds-truncate"
+                                                                        title="Burlington Textiles Corp of America">{!account.label}</span>
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </aura:if>
+                                                </aura:iteration>
+                                            </ul>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeTab}" />
+                    <lightning:button variant="brand" label="Next" disabled="{!v.disableButton}" onclick="{!c.next}" />
+                </div>
+            </div>
+        </div>
+        <div aura:id="overlay" class="slds-backdrop slds-backdrop--open"></div>
+        <aura:set attribute="else">
+            <c:newAccountModal accountId="{!v.accountId}" accountName="{!v.accountName}"
+                onnavigatetorecord="{!c.navigateToRecordPage}" onclosetab="{!c.closeTab}" onclose="{!c.closeQA}"
+                isAppTab="true" />
+        </aura:set>
+    </aura:renderIf>
+</aura:component>

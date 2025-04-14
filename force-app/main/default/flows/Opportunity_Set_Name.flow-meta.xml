@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <description>Sets the Opportunity Name field, on creation or update, to equal AccountId__r.Name+&apos; &apos;+Opportunity_Number__c+&apos; &apos;+Sales_Channel__c+&apos; &apos;+ DATEVALUE(CreatedDate) enhanced for  MM/DD/YYYY format</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Formula to create the Opportunity name.</description>
+        <name>OpportunityNameFormula</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Account.Name}+&apos; &apos;+{!$Record.Opportunity_Number__c}+&apos; &apos;+TEXT({!$Record.Sales_Channel__c})+&apos; &apos;+(LPAD(TEXT(MONTH(DATEVALUE({!$Record.CreatedDate}))),2,&quot;0&quot;) &amp; &quot;-&quot; &amp; LPAD(TEXT(DAY(DATEVALUE({!$Record.CreatedDate}))),2,&quot;0&quot;) &amp; &quot;-&quot; &amp; TEXT(YEAR(DATEVALUE({!$Record.CreatedDate})))
+)</expression>
+    </formulas>
+    <interviewLabel>Opportunity Set Name {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity Set Name</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>Updates the Opportunity Name.</description>
+        <name>Update_Opportunity_Name</name>
+        <label>Update Opportunity Name</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>OpportunityNameFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Opportunity_Name</targetReference>
+        </connector>
+        <filterFormula>AND(
+        TEXT({!$Record.StageName}) &lt;&gt; &apos;Closed Won&apos;,
+        TEXT({!$Record.StageName}) &lt;&gt; &apos;Closed Lost&apos;,
+    {!$Profile.Name} &lt;&gt; &apos;Chatter Free User&apos;
+  )</filterFormula>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

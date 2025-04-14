@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <customErrors>
+        <description>It displays error message when contract start date update fails.</description>
+        <name>Contract_Start_Date_Update_Failed</name>
+        <label>Contract Start Date Update Failed</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <customErrorMessages>
+            <errorMessage>&quot;Error occurred while updating the Contract Start Date&quot;. Please Contact System Administrator.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Update_Quote_to_not_Signed_Failed</name>
+        <label>Update Quote to not Signed Failed</label>
+        <locationX>842</locationX>
+        <locationY>539</locationY>
+        <customErrorMessages>
+            <errorMessage>&quot;Failed to update Quote status to Not Signed for cancelled Contract.&quot; Please Contact System Administrator.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Update_Quote_to_Signed_Failed</name>
+        <label>Update Quote to Signed Failed</label>
+        <locationX>1370</locationX>
+        <locationY>539</locationY>
+        <customErrorMessages>
+            <errorMessage>&quot;Failed to update Quote status to Signed for the Contract.&quot;
+Please Contact System Administrator.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Created_Or_Updated</name>
+        <label>Created Or Updated</label>
+        <locationX>842</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Contract_Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Contract_Start_Date</targetReference>
+            </connector>
+            <label>Contract Created</label>
+        </rules>
+        <rules>
+            <name>Contract_Cancelled</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Cancelled</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Quote_to_not_Signed</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>Contract Cancelled</label>
+        </rules>
+        <rules>
+            <name>Contract_is_Signed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Signed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Quote_to_Signed</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>Contract is Signed</label>
+        </rules>
+    </decisions>
+    <description>Added Reconcile Redlining check</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ISCHANGED</name>
+        <dataType>Boolean</dataType>
+        <expression>ISCHANGED({!$Record.LastModifiedDate})</expression>
+    </formulas>
+    <formulas>
+        <name>ISNEW</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <interviewLabel>Contract Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Contract_Start_Date</name>
+        <label>Update Contract Start Date</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <faultConnector>
+            <targetReference>Contract_Start_Date_Update_Failed</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>StartDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Quote_to_not_Signed</name>
+        <label>Update Quote to not Signed</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <faultConnector>
+            <targetReference>Update_Quote_to_not_Signed_Failed</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.vlocity_cmt__QuoteId__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Is_Contract_Signed__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Contract Rejected</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Quote</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Quote_to_Signed</name>
+        <label>Update Quote to Signed</label>
+        <locationX>1106</locationX>
+        <locationY>431</locationY>
+        <faultConnector>
+            <targetReference>Update_Quote_to_Signed_Failed</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.vlocity_cmt__QuoteId__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Is_Contract_Signed__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Contract Delivered</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Quote</object>
+    </recordUpdates>
+    <start>
+        <locationX>716</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Created_Or_Updated</targetReference>
+        </connector>
+        <filterFormula>AND(
+        OR(
+                    ISNEW(),
+                    ISPICKVAL({!$Record.Status}, &apos;Singed&apos;),
+                    ISPICKVAL({!$Record.Status}, &apos;Cancelled&apos;),
+                    ISPICKVAL({!$Record.Status}, &apos;Created&apos;)
+
+),
+{!$Profile.Name} &lt;&gt; &apos;Chatter Free User&apos;
+)</filterFormula>
+        <object>Contract</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

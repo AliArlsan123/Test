@@ -1,0 +1,1150 @@
+<template>
+  <template if:true={isCommunity}>
+    <div class="slds-modal slds-fade-in-open slds-backdrop">
+      <div if:true={showAlert}>
+        <c-custom-alert address={addressToAlert} onclosemodal={handleCloseAlert}></c-custom-alert>
+      </div>
+      <template if:true={isOpenCustomAlert}>
+        <div class="slds-modal slds-fade-in-open slds-backdrop">
+          <div class="slds-modal__container">
+            <!--                                    <div class="slds-modal__header"></div>-->
+            <div class="slds-modal__content">
+              <p class="slds-m-vertical_medium slds-align_absolute-center" style="font-size: 20px">
+                Do you want to leave?
+              </p>
+            </div>
+            <div class="slds-modal__footer">
+              <lightning-button label="No" class="slds-m-right_small" variant="brand" data-creation="No" title="No"
+                onclick={handleCloseModalAlert}>
+              </lightning-button>
+              <lightning-button label="Yes" class="slds-m-right_small" variant="brand" data-creation="Yes" title="Yes"
+                onclick={handleCloseModalAlert}>
+              </lightning-button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="nfwmdl-container slds-modal__container">
+        <div class="nfwmdl-container__border nfwmdl-container-height">
+          <div class="nfwmdl-header nfwmdl-header slds-modal__header">
+            <template if:true={isNewAccountWizard}>
+              <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+                <h1>New Contact</h1>
+              </div>
+            </template>
+            <template if:true={isEditAccountWizard}>
+              <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+                <h1>Edit Contact</h1>
+              </div>
+            </template>
+            <template if:false={isCommunity}>
+              <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+                <h1>New Contact</h1>
+              </div>
+            </template>
+            <div class="nfwmdl-header-indicator-styles">
+              <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                <template for:each={stepsArray} for:item="step">
+                  <template if:true={step.active}>
+                    <lightning-progress-step label={step.stepName} value={step.value} key={step.stepName}
+                      onclick={showCurrentPage}>
+                    </lightning-progress-step>
+                  </template>
+                  <template if:false={step.active}>
+                    <lightning-progress-step class="nam-progress-step" label={step.stepName} value={step.value}
+                      key={step.stepName} onclick={showCurrentPage}>
+                    </lightning-progress-step>
+                  </template>
+                </template>
+              </lightning-progress-indicator>
+            </div>
+          </div>
+          <div class="slds-modal__content nam-modal-styles nam-modal-container">
+            <template if:true={showLoading}>
+              <div>
+                <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"> </lightning-spinner>
+              </div>
+            </template>
+            <template if:true={isNewAccountWizard}>
+              <template for:each={fieldsArray} for:item="stepFields">
+                <!-- <template if:true={fieldsByStep}> -->
+                <div key={stepFields.stepName} class="slds-p-horizontal_medium">
+                  <template if:true={stepFields.isCurrentStep}>
+                    <template if:true={stepFields.stepName}>
+                      <div class="nfwmdl-section-label">
+                        <h1>{stepFields.stepName}</h1>
+                      </div>
+                    </template>
+                    <template for:each={stepFields.fields} for:item="field">
+                      <template if:true={field.picklist}>
+                        <template if:true={field.isPortalPermission}>
+                          <template if:true={isCommunityExistAndActive}>
+                            <lightning-combobox key={field.name} data-name={field.name}
+                              class="nam-input-field nfwmdl-section-container" name={field.name} label={field.label}
+                              value={field.value} options={field.options} onchange={handleChangeField}
+                              required={field.required} field-level-help={field.inlineHelpText}>
+                            </lightning-combobox>
+                          </template>
+                        </template>
+                      </template>
+                    </template>
+                    <div class="nfwmdl-section-container">
+                      <template if:true={stepFields.isAddress}>
+                        <lightning-input data-name="Is_PO_Box" type="checkbox" label="Is PO Box" name="Is_PO_Box"
+                          value="" onchange={handleChangeField} checked={isPOBox}></lightning-input>
+                        <template if:true={isPOBox}>
+                          <lightning-input-address class="slds-col" address-label="Search PO Box Address"
+                            street-label="PO Box Street" city-label="PO Box City" country-label="PO Box Country"
+                            province-label="PO Box State" postal-code-label="PO Box Postal Code"
+                            onchange={addressInputChange} street={strStreetPOBox} city={strCityPOBox}
+                            country={strCountryPOBox} province={strStatePOBox} postal-code={strPostalCodePOBox}
+                            show-address-lookup required autocomplete="off">
+                          </lightning-input-address>
+                        </template>
+                        <template if:false={isPOBox}>
+                          <lightning-input-address class="slds-col" address-label="Search Address"
+                            street-label="Mailing Street" city-label="Mailing City" country-label="Mailing Country"
+                            province-label="Mailing State" postal-code-label="Mailing Postal Code"
+                            onchange={addressInputChange} street={strStreet} city={strCity} country={strCountry}
+                            province={strState} postal-code={strPostalCode} show-address-lookup required
+                            autocomplete="off">
+                          </lightning-input-address>
+                          <lightning-input data-name="Mailing_Street_2__c" class="nam-input-field"
+                            name="Mailing_Street_2__c" type="text" label="Mailing Apt/Unit/Suite" value={apartStr}
+                            onchange={handleChangeField} autocomplete="off">
+                          </lightning-input>
+                        </template>
+                      </template>
+                      <template if:false={stepFields.isAddress}>
+                        <template for:each={stepFields.fields} for:item="field">
+                          <template if:true={field.input}>
+                            <template if:true={field.placeholder}>
+                              <lightning-input key={field.name} data-name={field.name} class="nam-input-field"
+                                name={field.name} type={field.type} label={field.label} value={field.value}
+                                onchange={handleChangeField} required={field.required}
+                                field-level-help={field.inlineHelpText} placeholder={field.placeholder}
+                                pattern={field.pattern} message-when-pattern-mismatch={field.patternErrorMessage}
+                                autocomplete="off">
+                              </lightning-input>
+                            </template>
+                            <template if:false={field.placeholder}>
+                              <lightning-input key={field.name} data-name={field.name} class="nam-input-field"
+                                name={field.name} type={field.type} label={field.label} value={field.value}
+                                onchange={handleChangeField} required={field.required}
+                                field-level-help={field.inlineHelpText} onkeydown={handleFocusField} autocomplete="off">
+                              </lightning-input>
+                            </template>
+                          </template>
+                          <template if:true={field.checkbox}>
+                            <lightning-input key={field.name} data-name={field.name} type="checkbox" label={field.label}
+                              name={field.name} value={field.value} onchange={handleChangeField}
+                              required={field.required} checked={field.checked} field-level-help={field.inlineHelpText}
+                              autocomplete="off">
+                            </lightning-input>
+                          </template>
+                          <template if:true={field.search}>
+                            <div key={field.name} class="slds-form-element slds-p-top_x-small">
+                              <label class="slds-form-element__label">{field.label}</label>
+                              <div class="slds-form-element__control">
+                                <div onmouseover={runData} onmouseleave={clearData} class="slds-combobox_container">
+                                  <div class={relatedContactsClass} data-id="resultBox" aria-expanded="false"
+                                    aria-haspopup="listbox" role="combobox">
+                                    <div
+                                      class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right"
+                                      role="none">
+                                      <lightning-input read-only={inputRelatedContactReadOnly} data-id="userinput"
+                                        placeholder="Enter your name" variant="label-hidden" label={Label}
+                                        name="searchText" onchange={searchReportsToContact}
+                                        value={selectedReportsToContact} onfocus={searchReportsToContact}
+                                        onblur={closeList} autocomplete="off"></lightning-input>
+                                      <div if:false={clearReportsToContactIconFlag}>
+                                        <span
+                                          class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                          <lightning-icon icon-name="utility:search" size="x-small"></lightning-icon>
+                                        </span>
+                                      </div>
+                                      <div if:true={clearReportsToContactIconFlag}>
+                                        <button data-label={field.label}
+                                          class="slds-input__icon slds-input__icon_right slds-button slds-button_icon iconheight"
+                                          onclick={resetRelatedContactsData}>
+                                          <lightning-icon
+                                            class="slds-icon slds-icon slds-icon_small slds-icon-text-default"
+                                            icon-name="utility:clear" size="x-small"
+                                            alternative-text="icon"></lightning-icon>
+                                          <span class="slds-assistive-text">Clear</span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <div onmouseover={runData} onmouseleave={clearData}>
+                                      <div if:true={isEnableList}
+                                        class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                                        role="listbox">
+                                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                          <template for:each={relatedContactList} for:item="contact">
+                                            <li role="presentation" class="slds-listbox__item" key={contact.Id}>
+                                              <div data-id={contact.Id} data-label={field.label}
+                                                data-name={contact.Name} onclick={selectReportToContact}
+                                                class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                role="option">
+                                                <span class="slds-media__body">
+                                                  <span
+                                                    class="slds-listbox__option-text slds-listbox__option-text_entity">{contact.Name}</span>
+                                                </span>
+                                              </div>
+                                            </li>
+                                          </template>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div if:true={messageFlag}>No result found.</div>
+                                    <div if:true={loadingText}>Loading...</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+                          <template if:true={field.picklist}>
+                            <template if:false={field.isPortalPermission}>
+                              <!-- <div key={field.name}>{field.label}</div> -->
+                              <lightning-combobox key={field.name} data-name={field.name} class="nam-input-field"
+                                name={field.name} label={field.label} value={field.value} options={field.options}
+                                onchange={handleChangeField} required={field.required}>
+                              </lightning-combobox>
+                            </template>
+                          </template>
+                          <template if:true={field.multipicklist}>
+                            <template if:true={field.isTypeInput}>
+                              <template if:true={field.custom}>
+                                <div class="slds-form-element" key={field.name}>
+                                  <label class="slds-form-element__label">{field.label}</label>
+                                  <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                      <div data-open={isOpenCombobox} data-name="combobox"
+                                        class="nam-combobox-is-open custom-combobox slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                        <div
+                                          class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                          onclick={toggleOpenCombobox}>
+                                          <button type="button"
+                                            class="slds-input_faux slds-combobox__input slds-combobox__input-value">
+                                            <span class="slds-truncate">{countCheckedAccounts} Accounts Selected</span>
+                                          </button>
+                                          <span
+                                            class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                            <lightning-icon icon-name="utility:down" alternative-text="down"
+                                              title="down" size="x-small"></lightning-icon>
+                                          </span>
+                                        </div>
+                                        <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                                          <ul class="nam-listbox slds-listbox slds-listbox_vertical">
+                                            <template for:each={relatedAccountPicklist} for:item="item">
+                                              <li class="slds-listbox__item" data-value={item.value} key={item.label}
+                                                onclick={toggleSelectRelatedAccount}>
+                                                <div aria-checked="true"
+                                                  class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected">
+                                                  <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <template if:true={item.checked}>
+                                                      <span
+                                                        class="slds-icon_container slds-icon-utility-check slds-current-color">
+                                                        <lightning-icon icon-name="utility:check"
+                                                          alternative-text="check" title="check" size="x-small">
+                                                        </lightning-icon>
+                                                      </span>
+                                                    </template>
+                                                  </span>
+                                                  <span class="slds-media__body">
+                                                    <span class="slds-truncate" title={item.label}>{item.label}</span>
+                                                  </span>
+                                                </div>
+                                              </li>
+                                            </template>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="slds-listbox_selection-group">
+                                      <ul class="slds-listbox slds-listbox_horizontal">
+                                        <template for:each={relatedAccountPicklist} for:item="item">
+                                          <template if:true={item.checked}>
+                                            <li class="slds-listbox-item" key={item.label}>
+                                              <span class="slds-pill">
+                                                <span class="slds-pill__label" title={item.label}>{item.label}</span>
+                                                <template if:false={item.disabled}>
+                                                  <span class="slds-icon_container slds-pill__remove">
+                                                    <lightning-icon style="cursor: pointer" icon-name="utility:close"
+                                                      alternative-text="close" title="close" data-value={item.value}
+                                                      onclick={toggleSelectRelatedAccount}>
+                                                    </lightning-icon>
+                                                  </span>
+                                                </template>
+                                              </span>
+                                            </li>
+                                          </template>
+                                        </template>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              </template>
+                              <!-- //Added for Custom MultiPiklist -->
+                              <template if:false={field.custom}>
+                                <div class="slds-form-element" key={field.name}>
+                                  <template if:true={field.required}><span class="rerequiredfield">
+                                      *
+                                      <label class="slds-form-element__label paddingfield">{field.label}</label>
+                                    </span>
+                                  </template>
+                                  <template if:false={field.required}>
+                                    <label class="slds-form-element__label">{field.label}</label>
+                                  </template>
+                                  <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                      <div data-open={isOpenCombobox} data-name="combobox"
+                                        class="nam-combobox-is-open custom-combobox slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                        <div
+                                          class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                          onclick={toggleOpenCombobox}>
+                                          <button type="button"
+                                            class="slds-input_faux slds-combobox__input slds-combobox__input-value">
+                                            <span class="slds-truncate">{field.count} Values Selected</span>
+                                          </button>
+                                          <span
+                                            class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                            <lightning-icon icon-name="utility:down" alternative-text="down"
+                                              title="down" size="x-small"></lightning-icon>
+                                          </span>
+                                        </div>
+                                        <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                                          <ul class="nam-listbox slds-listbox slds-listbox_vertical">
+                                            <template for:each={field.options} for:item="item">
+                                              <li class="slds-listbox__item" data-value={item.value} key={item.label}
+                                                onclick={toggleSelect} data-name={field.name}>
+                                                <div aria-checked="true"
+                                                  class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected">
+                                                  <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <template if:true={item.checked}>
+                                                      <span
+                                                        class="slds-icon_container slds-icon-utility-check slds-current-color">
+                                                        <lightning-icon icon-name="utility:check"
+                                                          alternative-text="check" title="check" size="x-small">
+                                                        </lightning-icon>
+                                                      </span>
+                                                    </template>
+                                                  </span>
+                                                  <span class="slds-media__body">
+                                                    <span class="slds-truncate" title={item.label}>{item.label}</span>
+                                                  </span>
+                                                </div>
+                                              </li>
+                                            </template>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="slds-listbox_selection-group">
+                                      <ul class="slds-listbox slds-listbox_horizontal">
+                                        <template for:each={field.options} for:item="item">
+                                          <template if:true={item.checked}>
+                                            <li class="slds-listbox-item" key={item.label}>
+                                              <span class="slds-pill">
+                                                <span class="slds-pill__label" title={item.label}>{item.label}</span>
+                                                <template if:false={item.disabled}>
+                                                  <span class="slds-icon_container slds-pill__remove">
+                                                    <lightning-icon style="cursor: pointer" data-name={field.name}
+                                                      icon-name="utility:close" alternative-text="close" title="close"
+                                                      data-value={item.value} onclick={toggleSelect}>
+                                                    </lightning-icon>
+                                                  </span>
+                                                </template>
+                                              </span>
+                                            </li>
+                                          </template>
+                                        </template>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </template>
+                              <!-- //Added for Custom MultiPiklist -->
+                            </template>
+                            <template for:each={relatedAccountPicklist} for:item="item">
+                              <template if:true={item.checked}>
+                                <template if:false={field.isTypeInput}>
+                                  <p class="slds-p-top_large" key={item.value}>Select Role for Account {item.label}</p>
+                                  <template if:false={isOpenFromBillingPage}>
+                                    <lightning-dual-listbox key={item.value} name={item.value} source-label="Available"
+                                      selected-label="Selected" options={field.options} value={item.role}
+                                      onchange={handleChangeRoleField}>
+                                    </lightning-dual-listbox>
+                                  </template>
+                                  <template if:true={isOpenFromBillingPage}>
+                                    <lightning-dual-listbox key={item.value} name={item.value} source-label="Available"
+                                      selected-label="Selected" options={field.options}
+                                      required-options={field.requiredOption} value={item.role}
+                                      onchange={handleChangeRoleField}>
+                                    </lightning-dual-listbox>
+                                  </template>
+                                </template>
+                              </template>
+                            </template>
+                            <!-- <template if:false={field.isTypeInput}>
+                                                            <lightning-dual-listbox key={field.name.fieldApiName} name={field.name.fieldApiName}
+                                                                                    label={field.label}
+                                                                                    source-label="Available"
+                                                                                    selected-label="Selected"
+                                                                                    field-level-help="Select your preferred languages"
+                                                                                    options={field.options}
+                                                                                    value={field.value}
+                                                                                    onchange={handleChangeField}></lightning-dual-listbox>
+                                                        </template> -->
+                          </template>
+                        </template>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+              </template>
+            </template>
+            <template if:true={isEditAccountWizard}>
+              <template for:each={fieldsArray} for:item="stepFields">
+                <!-- <template if:true={fieldsByStep}> -->
+                <div key={stepFields.stepName} class="slds-p-horizontal_medium">
+                  <template if:true={stepFields.isCurrentStep}>
+                    <template if:true={stepFields.stepName}>
+                      <div key={stepFields.stepName} class="nfwmdl-section-label">
+                        <h1>{stepFields.stepName}</h1>
+                      </div>
+                    </template>
+                    <template for:each={stepFields.fields} for:item="field">
+                      <template if:true={field.picklist}>
+                        <template if:true={field.isPortalPermission}>
+                          <template if:true={isCommunityExistAndActive}>
+                            <lightning-combobox key={field.name} data-name={field.name}
+                              class="nam-input-field nfwmdl-section-container" name={field.name} label={field.label}
+                              value={field.value} options={field.options} onchange={handleChangeField}
+                              required={field.required} field-level-help={field.inlineHelpText}>
+                            </lightning-combobox>
+                          </template>
+                        </template>
+                      </template>
+                    </template>
+                    <div key={stepFields.stepName} class="nfwmdl-section-container">
+                      <template if:true={stepFields.isAddress}>
+                        <lightning-input key={stepFields.stepName} data-name="Is_PO_Box" type="checkbox"
+                          label="Is PO Box" name="Is_PO_Box" value="" onchange={handleChangeField}
+                          checked={isPOBox}></lightning-input>
+                        <template if:true={isPOBox}>
+                          <lightning-input-address class="slds-col" address-label="Search PO Box Address"
+                            street-label="PO Box Street" city-label="PO Box City" country-label="PO Box Country"
+                            province-label="PO Box State" postal-code-label="PO Box Postal Code"
+                            onchange={addressInputChange} street={strStreetPOBox} city={strCityPOBox}
+                            country={strCountryPOBox} province={strStatePOBox} postal-code={strPostalCodePOBox}
+                            show-address-lookup required autocomplete="off">
+                          </lightning-input-address>
+                        </template>
+                        <template if:false={isPOBox}>
+                          <lightning-input-address class="slds-col" address-label="Search Address"
+                            street-label="Mailing Street" city-label="Mailing City" country-label="Mailing Country"
+                            province-label="Mailing State" postal-code-label="Mailing Postal Code"
+                            onchange={addressInputChange} street={strStreet} city={strCity} country={strCountry}
+                            province={strState} postal-code={strPostalCode} show-address-lookup required
+                            autocomplete="off">
+                          </lightning-input-address>
+                          <lightning-input data-name="Mailing_Street_2__c" class="nam-input-field"
+                            name="Mailing_Street_2__c" type="text" label="Mailing Apt/Unit/Suite" value={apartStr}
+                            onchange={handleChangeField} autocomplete="off">
+                          </lightning-input>
+                        </template>
+                      </template>
+                      <template if:false={stepFields.isAddress}>
+                        <template for:each={stepFields.fields} for:item="field">
+                          <template if:true={field.input}>
+                            <lightning-input key={field.name} data-name={field.name} class="nam-input-field"
+                              name={field.name} type={field.type} label={field.label} value={field.value}
+                              onchange={handleChangeField} required={field.required}
+                              field-level-help={field.inlineHelpText} autocomplete="off">
+                            </lightning-input>
+                          </template>
+                          <template if:true={field.picklist}>
+                            <template if:false={field.isPortalPermission}>
+                              <!-- <div key={field.name}>{field.label}</div> -->
+                              <lightning-combobox key={field.name} data-name={field.name} class="nam-input-field"
+                                name={field.name} label={field.label} value={field.value} options={field.options}
+                                onchange={handleChangeField} required={field.required}
+                                field-level-help={field.inlineHelpText}>
+                              </lightning-combobox>
+                            </template>
+                          </template>
+                          <template if:true={field.checkbox}>
+                            <lightning-input key={field.name} data-name={field.name} type="checkbox" label={field.label}
+                              name={field.name} value={field.value} onchange={handleChangeField}
+                              required={field.required} checked={field.checked} field-level-help={field.inlineHelpText}
+                              autocomplete="off"></lightning-input>
+                          </template>
+                          <template if:true={field.search}>
+                            <div key={field.name} class="slds-form-element slds-p-top_x-small">
+                              <label class="slds-form-element__label">{field.label}</label>
+                              <div class="slds-form-element__control">
+                                <div onmouseover={runData} onmouseleave={clearData} class="slds-combobox_container">
+                                  <div class={relatedContactsClass} data-id="resultBox" aria-expanded="false"
+                                    aria-haspopup="listbox" role="combobox">
+                                    <div
+                                      class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right"
+                                      role="none">
+                                      <lightning-input read-only={inputRelatedContactReadOnly} data-id="userinput"
+                                        placeholder="Enter your name" variant="label-hidden" label={Label}
+                                        name="searchText" onchange={searchReportsToContact}
+                                        value={selectedReportsToContact} onfocus={searchReportsToContact}
+                                        onblur={closeList} autocomplete="off"></lightning-input>
+                                      <div if:false={clearReportsToContactIconFlag}>
+                                        <span
+                                          class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                          <lightning-icon icon-name="utility:search" size="x-small"></lightning-icon>
+                                        </span>
+                                      </div>
+                                      <div if:true={clearReportsToContactIconFlag}>
+                                        <button data-label={field.label}
+                                          class="slds-input__icon slds-input__icon_right slds-button slds-button_icon iconheight"
+                                          onclick={resetRelatedContactsData}>
+                                          <lightning-icon
+                                            class="slds-icon slds-icon slds-icon_small slds-icon-text-default"
+                                            icon-name="utility:clear" size="x-small"
+                                            alternative-text="icon"></lightning-icon>
+                                          <span class="slds-assistive-text">Clear</span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <div onmouseover={runData} onmouseleave={clearData}>
+                                      <div if:true={isEnableList}
+                                        class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                                        role="listbox">
+                                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                          <template for:each={relatedContactList} for:item="contact">
+                                            <li role="presentation" class="slds-listbox__item" key={contact.Id}>
+                                              <div data-id={contact.Id} data-label={field.label}
+                                                data-name={contact.Name} onclick={selectReportToContact}
+                                                class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                role="option">
+                                                <span class="slds-media__body">
+                                                  <span
+                                                    class="slds-listbox__option-text slds-listbox__option-text_entity">{contact.Name}</span>
+                                                </span>
+                                              </div>
+                                            </li>
+                                          </template>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div if:true={messageFlag}>No result found.</div>
+                                    <div if:true={loadingText}>Loading...</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+                          <template if:true={field.multipicklist}>
+                            <template if:true={field.isTypeInput}>
+                              <template if:true={field.custom}>
+                                <div class="slds-form-element" key={field.name}>
+                                  <label class="slds-form-element__label">{field.label}</label>
+                                  <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                      <div data-open={isOpenCombobox} data-name="combobox"
+                                        class="nam-combobox-is-open custom-combobox slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                        <div
+                                          class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                          onclick={toggleOpenCombobox}>
+                                          <button type="button"
+                                            class="slds-input_faux slds-combobox__input slds-combobox__input-value">
+                                            <span class="slds-truncate">{countCheckedAccounts} Accounts Selected</span>
+                                          </button>
+                                          <span
+                                            class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                            <lightning-icon icon-name="utility:down" alternative-text="down"
+                                              title="down" size="x-small"></lightning-icon>
+                                          </span>
+                                        </div>
+                                        <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                                          <ul class="nam-listbox slds-listbox slds-listbox_vertical">
+                                            <template for:each={relatedAccountPicklist} for:item="item">
+                                              <li class="slds-listbox__item" data-value={item.value} key={item.label}
+                                                onclick={toggleSelectRelatedAccount}>
+                                                <div aria-checked="true"
+                                                  class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected">
+                                                  <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <template if:true={item.checked}>
+                                                      <span
+                                                        class="slds-icon_container slds-icon-utility-check slds-current-color">
+                                                        <lightning-icon icon-name="utility:check"
+                                                          alternative-text="check" title="check" size="x-small">
+                                                        </lightning-icon>
+                                                      </span>
+                                                    </template>
+                                                  </span>
+                                                  <span class="slds-media__body">
+                                                    <span class="slds-truncate" title={item.label}>{item.label}</span>
+                                                  </span>
+                                                </div>
+                                              </li>
+                                            </template>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="slds-listbox_selection-group">
+                                      <ul class="slds-listbox slds-listbox_horizontal">
+                                        <template for:each={relatedAccountPicklist} for:item="item">
+                                          <template if:true={item.checked}>
+                                            <li class="slds-listbox-item" key={item.label}>
+                                              <span class="slds-pill">
+                                                <span class="slds-pill__label" title={item.label}>{item.label}</span>
+                                                <template if:false={item.disabled}>
+                                                  <span class="slds-icon_container slds-pill__remove">
+                                                    <lightning-icon style="cursor: pointer" icon-name="utility:close"
+                                                      alternative-text="close" title="close" data-value={item.value}
+                                                      onclick={toggleSelectRelatedAccount}>
+                                                    </lightning-icon>
+                                                  </span>
+                                                </template>
+                                              </span>
+                                            </li>
+                                          </template>
+                                        </template>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              </template>
+                              <!-- //Added for Custom MultiPiklist -->
+                              <template if:false={field.custom}>
+                                <div class="slds-form-element" key={field.name}>
+                                  <template if:true={field.required}><span class="rerequiredfield">
+                                      *
+                                      <label class="slds-form-element__label paddingfield">{field.label}</label>
+                                    </span>
+                                  </template>
+                                  <template if:false={field.required}>
+                                    <label class="slds-form-element__label">{field.label}</label>
+                                  </template>
+                                  <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                      <div data-open={isOpenCombobox} data-name="combobox"
+                                        class="nam-combobox-is-open custom-combobox slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                        <div
+                                          class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                          onclick={toggleOpenCombobox}>
+                                          <button type="button"
+                                            class="slds-input_faux slds-combobox__input slds-combobox__input-value">
+                                            <span class="slds-truncate">{field.count} Values Selected</span>
+                                          </button>
+                                          <span
+                                            class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                            <lightning-icon icon-name="utility:down" alternative-text="down"
+                                              title="down" size="x-small"></lightning-icon>
+                                          </span>
+                                        </div>
+                                        <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                                          <ul class="nam-listbox slds-listbox slds-listbox_vertical">
+                                            <template for:each={field.options} for:item="item">
+                                              <li class="slds-listbox__item" data-value={item.value} key={item.label}
+                                                onclick={toggleSelect} data-name={field.name}>
+                                                <div aria-checked="true"
+                                                  class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected">
+                                                  <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <template if:true={item.checked}>
+                                                      <span
+                                                        class="slds-icon_container slds-icon-utility-check slds-current-color">
+                                                        <lightning-icon icon-name="utility:check"
+                                                          alternative-text="check" title="check" size="x-small">
+                                                        </lightning-icon>
+                                                      </span>
+                                                    </template>
+                                                  </span>
+                                                  <span class="slds-media__body">
+                                                    <span class="slds-truncate" title={item.label}>{item.label}</span>
+                                                  </span>
+                                                </div>
+                                              </li>
+                                            </template>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="slds-listbox_selection-group">
+                                      <ul class="slds-listbox slds-listbox_horizontal">
+                                        <template for:each={field.options} for:item="item">
+                                          <template if:true={item.checked}>
+                                            <li class="slds-listbox-item" key={item.label}>
+                                              <span class="slds-pill">
+                                                <span class="slds-pill__label" title={item.label}>{item.label}</span>
+                                                <template if:false={item.disabled}>
+                                                  <span class="slds-icon_container slds-pill__remove">
+                                                    <lightning-icon style="cursor: pointer" data-name={field.name}
+                                                      icon-name="utility:close" alternative-text="close" title="close"
+                                                      data-value={item.value} onclick={toggleSelect}>
+                                                    </lightning-icon>
+                                                  </span>
+                                                </template>
+                                              </span>
+                                            </li>
+                                          </template>
+                                        </template>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </template>
+                              <!-- //Added for Custom MultiPiklist -->
+                            </template>
+
+                            <template for:each={relatedAccountPicklist} for:item="item">
+                              <template if:true={item.checked}>
+                                <template if:false={field.isTypeInput}>
+                                  <p class="slds-p-top_large" key={item.value}>Select Role for Account {item.label}</p>
+                                  <lightning-dual-listbox key={item.value} name={item.value} source-label="Available"
+                                    selected-label="Selected" options={field.options} value={item.role}
+                                    onchange={handleChangeRoleField}>
+                                  </lightning-dual-listbox>
+                                </template>
+                              </template>
+                            </template>
+                          </template>
+                        </template>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+              </template>
+            </template>
+          </div>
+          <template if:true={isNewAccountWizard}>
+            <div class="slds-modal__footer nfwmdl-footer">
+              <lightning-button label="Cancel" class="slds-m-right_small" type="cancel" variant="brand" title="Cancel"
+                onclick={handleClose}>
+              </lightning-button>
+              <template if:false={isOpenFromBillingPage}>
+                <lightning-button label="Save as draft" variant="brand" data-is-draft="true" data-new="false"
+                  class="slds-m-right_small" title="Save as draft" onclick={handleSubmit} disabled={isNotValidFields}>
+                </lightning-button>
+              </template>
+              <template if:false={isFirstStep}>
+                <lightning-button label="Back" title="Back" variant="brand" class="slds-m-right_small"
+                  onclick={handleBackStep}>
+                </lightning-button>
+              </template>
+              <template if:true={isLastStep}>
+                <lightning-button label="Save and New" class="slds-m-right_small" variant="brand" data-is-draft="false"
+                  data-new="true" title="Save and New" onclick={handleSubmit} disabled={isNotValidFields}>
+                </lightning-button>
+                <lightning-button label="Submit" variant="brand" title="Submit" data-is-draft="false" data-new="false"
+                  onclick={handleSubmit} disabled={isNotValidFields}>
+                </lightning-button>
+              </template>
+              <template if:false={isLastStep}>
+                <lightning-button label="Next" variant="brand" title="Next" disabled={isNotValidFields}
+                  onclick={handleNextStep}></lightning-button>
+              </template>
+            </div>
+          </template>
+          <template if:true={isEditAccountWizard}>
+            <div class="slds-modal__footer nfwmdl-footer">
+              <lightning-button label="Cancel" class="slds-m-right_small" type="cancel" variant="base" title="Cancel"
+                onclick={handleClose}>
+              </lightning-button>
+              <template if:true={showDraftButton}>
+                <lightning-button label="Save as draft" variant="brand" data-is-draft="true" data-new="false"
+                  class="slds-m-right_small" title="Save as draft" onclick={handleSubmit} disabled={isNotValidFields}>
+                </lightning-button>
+              </template>
+              <template if:false={isFirstStep}>
+                <lightning-button label="Back" title="Back" variant="brand" class="slds-m-right_small"
+                  onclick={handleBackStep}>
+                </lightning-button>
+              </template>
+              <template if:true={isLastStep}>
+                <lightning-button label="Save and New" class="slds-m-right_small" variant="brand" data-is-draft="false"
+                  data-new="true" title="Save and New" onclick={handleSubmit} disabled={isNotValidFields}>
+                </lightning-button>
+                <lightning-button label="Submit" variant="brand" title="Submit" data-is-draft="false" data-new="false"
+                  onclick={handleSubmit} disabled={isNotValidFields}>
+                </lightning-button>
+              </template>
+              <template if:false={isLastStep}>
+                <lightning-button label="Next" variant="brand" title="Next" disabled={isNotValidFields}
+                  onclick={handleNextStep}></lightning-button>
+              </template>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:false={isCommunity}>
+    <div class="slds-modal slds-fade-in-open">
+      <div if:true={showAlert}>
+        <c-custom-alert address={addressToAlert} onclosemodal={handleCloseAlert}></c-custom-alert>
+      </div>
+      <template if:true={isOpenCustomAlert}>
+        <div class="slds-modal slds-fade-in-open slds-backdrop">
+          <div class="slds-modal__container">
+            <!--                                    <div class="slds-modal__header"></div>-->
+            <div class="slds-modal__content">
+              <p class="slds-m-vertical_medium slds-align_absolute-center" style="font-size: 20px">
+                Do you want to leave?
+              </p>
+            </div>
+            <div class="slds-modal__footer">
+              <lightning-button label="No" class="slds-m-right_small" variant="brand" data-creation="No" title="No"
+                onclick={handleCloseModalAlert}>
+              </lightning-button>
+              <lightning-button label="Yes" class="slds-m-right_small" variant="brand" data-creation="Yes" title="Yes"
+                onclick={handleCloseModalAlert}>
+              </lightning-button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="nfwmdl-container slds-modal__container">
+        <div class="nfwmdl-container__border-not-community nfwmdl-container-height">
+          <div class="nfwmdl-header-not-community nfwmdl-header slds-modal__header">
+            <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+              <h1>{notCommunityLabel}</h1>
+            </div>
+            <!-- <template if:true={isNewAccountWizard}>
+                            <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+                                <h1>New Contact</h1>
+                            </div>
+                        </template>
+                        <template if:true={isGuidedEditAccountModal}>
+                            <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+                                <h1>Edit Contact</h1>
+                            </div>
+                        </template> -->
+            <div class="nfwmdl-header-indicator-styles">
+              <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                <template for:each={stepsArray} for:item="step">
+                  <template if:true={step.active}>
+                    <lightning-progress-step label={step.stepName} value={step.value} key={step.stepName}
+                      onclick={showCurrentPage}>
+                    </lightning-progress-step>
+                  </template>
+                  <template if:false={step.active}>
+                    <lightning-progress-step class="nam-progress-step" label={step.stepName} value={step.value}
+                      key={step.stepName} onclick={showCurrentPage}>
+                    </lightning-progress-step>
+                  </template>
+                </template>
+              </lightning-progress-indicator>
+            </div>
+          </div>
+          <div class="slds-modal__content nam-modal-styles nam-modal-container">
+            <template if:true={showLoading}>
+              <div>
+                <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"> </lightning-spinner>
+              </div>
+            </template>
+            <template for:each={fieldsArray} for:item="stepFields">
+              <!-- <template if:true={fieldsByStep}> -->
+              <div key={stepFields.stepName} class="slds-p-horizontal_medium">
+                <template if:true={stepFields.isCurrentStep}>
+                  <template if:true={stepFields.stepName}>
+                    <div key={stepFields.stepName} class="nfwmdl-section-label">
+                      <h1>{stepFields.stepName}</h1>
+                    </div>
+                  </template>
+                  <template for:each={stepFields.fields} for:item="field">
+                    <template if:true={field.picklist}>
+                      <template if:true={field.isPortalPermission}>
+                        <template if:true={isCommunityExistAndActive}>
+                          <lightning-combobox key={field.name} data-name={field.name}
+                            class="nam-input-field nfwmdl-section-container" name={field.name} label={field.label}
+                            value={field.value} options={field.options} onchange={handleChangeField}
+                            required={field.required} field-level-help={field.inlineHelpText}>
+                          </lightning-combobox>
+                        </template>
+                      </template>
+
+                    </template>
+                    <!-- //Added for Custom MultiPiklist -->
+                    <template if:true={field.multipicklist}>
+                      <!-- <template if:true={field.isTypeInput}>
+                        <lightning-dual-listbox class="nwsize nam-listbox" key={field.name} data-name={field.name}
+                          name={field.name} label={field.label} source-label="Available" selected-label="Selected"
+                          field-level-help={field.inlineHelpText} options={field.options} onchange={handleChangeField}
+                          value={field.value} size="4"></lightning-dual-listbox>
+                      </template> -->
+                      <template if:true={field.isTypeInput}>
+                        <div class="slds-form-element nwsize" key={field.name}>
+                          <template if:true={field.required}><span class="rerequiredfield">
+                              *
+                              <label class="slds-form-element__label paddingfield">{field.label}</label>
+                            </span>
+                          </template>
+                          <template if:false={field.required}>
+                            <label class="slds-form-element__label">{field.label}</label>
+                          </template>
+                          <div class="slds-form-element__control">
+                            <div class="slds-combobox_container">
+                              <div data-open={isOpenCombobox} data-name="combobox"
+                                class="nam-combobox-is-open custom-combobox slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                  onclick={toggleOpenCombobox}>
+                                  <button type="button"
+                                    class="slds-input_faux slds-combobox__input slds-combobox__input-value">
+                                    <span class="slds-truncate">{field.count} Values Selected</span>
+                                  </button>
+                                  <span
+                                    class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                    <lightning-icon icon-name="utility:down" alternative-text="down" title="down"
+                                      size="x-small"></lightning-icon>
+                                  </span>
+                                </div>
+                                <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                                  <ul class="nam-listbox slds-listbox slds-listbox_vertical">
+                                    <template for:each={field.options} for:item="item">
+                                      <li class="slds-listbox__item" data-value={item.value} key={item.label}
+                                        onclick={toggleSelect} data-name={field.name}>
+                                        <div aria-checked="true"
+                                          class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected">
+                                          <span class="slds-media__figure slds-listbox__option-icon">
+                                            <template if:true={item.checked}>
+                                              <span
+                                                class="slds-icon_container slds-icon-utility-check slds-current-color">
+                                                <lightning-icon icon-name="utility:check" alternative-text="check"
+                                                  title="check" size="x-small">
+                                                </lightning-icon>
+                                              </span>
+                                            </template>
+                                          </span>
+                                          <span class="slds-media__body">
+                                            <span class="slds-truncate" title={item.label}>{item.label}</span>
+                                          </span>
+                                        </div>
+                                      </li>
+                                    </template>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="slds-listbox_selection-group">
+                              <ul class="slds-listbox slds-listbox_horizontal">
+                                <template for:each={field.options} for:item="item">
+                                  <template if:true={item.checked}>
+                                    <li class="slds-listbox-item" key={item.label}>
+                                      <span class="slds-pill">
+                                        <span class="slds-pill__label" title={item.label}>{item.label}</span>
+                                        <template if:false={item.disabled}>
+                                          <span class="slds-icon_container slds-pill__remove">
+                                            <lightning-icon style="cursor: pointer" data-name={field.name}
+                                              icon-name="utility:close" alternative-text="close" title="close"
+                                              data-value={item.value} onclick={toggleSelect}>
+                                            </lightning-icon>
+                                          </span>
+                                        </template>
+                                      </span>
+                                    </li>
+                                  </template>
+                                </template>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
+                    </template>
+                    <!-- //Added for Custom MultiPiklist -->
+                  </template>
+                  <div key={stepFields.stepName} class="nfwmdl-section-container">
+                    <template if:true={stepFields.isAddress}>
+                      <lightning-input key={stepFields.stepName} data-name="Is_PO_Box" type="checkbox" label="Is PO Box"
+                        name="Is_PO_Box" value="" onchange={handleChangeField} checked={isPOBox}></lightning-input>
+                      <template if:true={isPOBox}>
+                        <lightning-input-address class="slds-col" address-label="Search PO Box Address"
+                          street-label="PO Box Street" city-label="PO Box City" country-label="PO Box Country"
+                          province-label="PO Box State" postal-code-label="PO Box Postal Code"
+                          onchange={addressInputChange} street={strStreetPOBox} city={strCityPOBox}
+                          country={strCountryPOBox} province={strStatePOBox} postal-code={strPostalCodePOBox}
+                          show-address-lookup required autocomplete="off">
+                        </lightning-input-address>
+                      </template>
+                      <template if:false={isPOBox}>
+                        <lightning-input-address class="slds-col" address-label="Search Address"
+                          street-label="Mailing Street" city-label="Mailing City" country-label="Mailing Country"
+                          province-label="Mailing State" postal-code-label="Mailing Postal Code"
+                          onchange={addressInputChange} street={strStreet} city={strCity} country={strCountry}
+                          province={strState} postal-code={strPostalCode} show-address-lookup required
+                          autocomplete="off">
+                        </lightning-input-address>
+                        <lightning-input data-name="Mailing_Street_2__c" class="nam-input-field"
+                          name="Mailing_Street_2__c" type="text" label="Mailing Apt/Unit/Suite" value={apartStr}
+                          onchange={handleChangeField} autocomplete="off">
+                        </lightning-input>
+                      </template>
+                      <!--                                            <template for:each={stepFields.fields} for:item="field">-->
+                      <!--                                                <template if:true={field.isApartment}>-->
+                      <!--                                                    <lightning-input data-name='Mailing Apt/Unit/Suite' class="nam-input-field"-->
+                      <!--                                                                     name='Mailing_Street_2__c' type='text' label='Mailing Apt/Unit/Suite'-->
+                      <!--                                                                     value={apartStr} onchange={handleChangeField}>-->
+                      <!--                                                    </lightning-input>-->
+                      <!--                                                </template>-->
+                      <!--                                            </template>-->
+                    </template>
+                    <template if:false={stepFields.isAddress}>
+                      <template for:each={stepFields.fields} for:item="field">
+                        <template if:true={field.input}>
+                          <template if:true={field.placeholder}>
+                            <lightning-input key={field.name} data-name={field.name} class="nam-input-field"
+                              name={field.name} type={field.type} label={field.label} value={field.value}
+                              onchange={handleChangeField} required={field.required}
+                              field-level-help={field.inlineHelpText} placeholder={field.placeholder}
+                              pattern={field.pattern} message-when-pattern-mismatch={field.patternErrorMessage}
+                              autocomplete="off">
+                            </lightning-input>
+                          </template>
+                          <template if:false={field.placeholder}>
+                            <lightning-input key={field.name} data-name={field.name} class="nam-input-field"
+                              name={field.name} type={field.type} label={field.label} value={field.value}
+                              onchange={handleChangeField} required={field.required}
+                              field-level-help={field.inlineHelpText} onkeydown={handleFocusField} autocomplete="off">
+                            </lightning-input>
+                          </template>
+                        </template>
+                        <template if:true={field.inputDisabled}>
+                          <lightning-input key={field.name} data-name={field.name} class="nam-input-field"
+                            name={field.name} type={field.type} label={field.label} value={field.value}
+                            onchange={handleChangeField} required={field.required}
+                            field-level-help={field.inlineHelpText} disabled autocomplete="off">
+                          </lightning-input>
+                        </template>
+                        <template if:true={field.checkbox}>
+                          <lightning-input key={field.name} data-name={field.name} type="checkbox" label={field.label}
+                            name={field.name} value={field.value} onchange={handleChangeField} required={field.required}
+                            checked={field.checked} field-level-help={field.inlineHelpText}>
+                          </lightning-input>
+                        </template>
+                        <template if:true={field.search}>
+                          <div key={field.name} class="slds-form-element slds-p-top_x-small">
+                            <label class="slds-form-element__label">{field.label}</label>
+                            <div class="slds-form-element__control">
+                              <div onmouseover={runData} onmouseleave={clearData} class="slds-combobox_container">
+                                <div class={relatedContactsClass} data-id="resultBox" aria-expanded="false"
+                                  aria-haspopup="listbox" role="combobox">
+                                  <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right"
+                                    role="none">
+                                    <lightning-input read-only={inputRelatedContactReadOnly} data-id="userinput"
+                                      placeholder="Enter your name" variant="label-hidden" label={Label}
+                                      name="searchText" onchange={searchReportsToContact}
+                                      value={selectedReportsToContact} onfocus={searchReportsToContact}
+                                      onblur={closeList} autocomplete="off"></lightning-input>
+                                    <div if:false={clearReportsToContactIconFlag}>
+                                      <span
+                                        class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                        <lightning-icon icon-name="utility:search" size="x-small"></lightning-icon>
+                                      </span>
+                                    </div>
+                                    <div if:true={clearReportsToContactIconFlag}>
+                                      <button data-label={field.label}
+                                        class="slds-input__icon slds-input__icon_right slds-button slds-button_icon iconheight"
+                                        onclick={resetRelatedContactsData}>
+                                        <lightning-icon
+                                          class="slds-icon slds-icon slds-icon_small slds-icon-text-default"
+                                          icon-name="utility:clear" size="x-small"
+                                          alternative-text="icon"></lightning-icon>
+                                        <span class="slds-assistive-text">Clear</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div onmouseover={runData} onmouseleave={clearData}>
+                                    <div if:true={isEnableList}
+                                      class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                                      role="listbox">
+                                      <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                        <template for:each={relatedContactList} for:item="contact">
+                                          <li role="presentation" class="slds-listbox__item" key={contact.Id}>
+                                            <div data-id={contact.Id} data-label={field.label} data-name={contact.Name}
+                                              onclick={selectReportToContact}
+                                              class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                              role="option">
+                                              <span class="slds-media__body">
+                                                <span
+                                                  class="slds-listbox__option-text slds-listbox__option-text_entity">{contact.Name}</span>
+                                              </span>
+                                            </div>
+                                          </li>
+                                        </template>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div if:true={messageFlag}>No result found.</div>
+                                  <div if:true={loadingText}>Loading...</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                        <template if:true={field.picklist}>
+                          <template if:false={field.isPortalPermission}>
+                            <!-- <div key={field.name}>{field.label}</div> -->
+                            <lightning-combobox key={field.name} data-name={field.name} class="nam-input-field"
+                              name={field.name} label={field.label} value={field.value} options={field.options}
+                              onchange={handleChangeField} required={field.required}
+                              field-level-help={field.inlineHelpText}>
+                            </lightning-combobox>
+                          </template>
+                        </template>
+                        <template if:true={field.multipicklist}>
+                          <template if:true={accountName}>
+                            <template if:false={field.isTypeInput}>
+                              <p class="slds-p-top_large" key={accountName}>Select Role for Account {accountName}</p>
+                              <lightning-dual-listbox key={accountName} name="Select Option" source-label="Available"
+                                selected-label="Selected" options={field.options} value={rolePicklist}
+                                onchange={handleChangeRoleField}>
+                              </lightning-dual-listbox>
+                            </template>
+                          </template>
+                        </template>
+                      </template>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+          <div class="slds-modal__footer nfwmdl-footer">
+            <lightning-button label="Cancel" class="slds-m-right_small" type="cancel" variant="brand" title="Cancel"
+              onclick={handleClose}>
+            </lightning-button>
+            <!-- <template if:false={isOpenFromBillingPage}>
+                            <lightning-button label="Save as draft" variant="brand" data-is-draft="true"
+                                              class="slds-m-right_small" title="Save as draft" onclick={handleSubmit}
+                                              disabled={isNotValidFields}>
+                            </lightning-button>
+                        </template> -->
+            <template if:true={showDraftButton}>
+              <lightning-button label="Save as draft" variant="brand" data-is-draft="true" data-new="false"
+                class="slds-m-right_small" title="Save as draft" onclick={handleSubmit} disabled={isNotValidFields}>
+              </lightning-button>
+            </template>
+            <template if:false={isFirstStep}>
+              <lightning-button label="Back" title="Back" variant="brand" class="slds-m-right_small"
+                onclick={handleBackStep}>
+              </lightning-button>
+            </template>
+            <template if:true={isLastStep}>
+              <lightning-button label="Save and New" class="slds-m-right_small" variant="brand" data-is-draft="false"
+                data-new="true" title="Save and New" onclick={handleSubmit} disabled={isNotValidFields}>
+              </lightning-button>
+              <lightning-button label="Submit" variant="brand" title="Submit" data-is-draft="false" data-new="false"
+                onclick={handleSubmit} disabled={isNotValidFields}>
+              </lightning-button>
+            </template>
+            <template if:false={isLastStep}>
+              <lightning-button label="Next" variant="brand" title="Next" disabled={isNotValidFields}
+                onclick={handleNextStep}></lightning-button>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

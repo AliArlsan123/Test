@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Notify_Admin_of_Update_Failure</name>
+        <label>Notify Admin of Update Failure</label>
+        <locationX>264</locationX>
+        <locationY>539</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>NotificationUniquePlanID</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>NotificationUniquePlanID</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Owner:User.AccountId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <decisions>
+        <name>Unique_Plan_ID_updated</name>
+        <label>Unique Plan ID updated?</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Notify_Admin_of_Update_Failure</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Unique Plan ID not Populated</defaultConnectorLabel>
+        <rules>
+            <name>Unique_Plan_ID_Populated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Unique_Plan_Id__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Unique Plan ID Populated</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>ConstructUniquePlanId</name>
+        <dataType>String</dataType>
+        <expression>IF(TEXT({!$Record.Connection_Type__c}) == &apos;Fixed&apos;, &apos;F&apos;,&apos;M&apos;)+{!$Record.FRN__c}+IF(TEXT({!$Record.Product_Family__c}) == &apos;Residential&apos;,&apos;R0000&apos;,&apos;B0000&apos;)+{!$Record.Unique_Plan_ID_Autonumber__c}</expression>
+    </formulas>
+    <interviewLabel>Broadband Label Before Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Broadband Label Before Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Unique_Plan_ID</name>
+        <label>Update Unique Plan ID</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <connector>
+            <targetReference>Unique_Plan_ID_updated</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Unique_Plan_Id__c</field>
+            <value>
+                <elementReference>ConstructUniquePlanId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Unique_Plan_ID</targetReference>
+        </connector>
+        <object>Broadband_Label__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>NotificationUniquePlanID</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;{!$Record.Unique_Plan_Id__c} Failed to update.&lt;/p&gt;&lt;p&gt;Please Contact System Administrator&lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

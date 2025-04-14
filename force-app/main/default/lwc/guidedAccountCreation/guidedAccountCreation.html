@@ -1,0 +1,332 @@
+<!--
+ - Created by Yulia on 9/5/2022.
+ -->
+<template>
+  <template if:true={isOpenSelectAccountRecordTypeModal}>
+    <article class="slds-card gac-card-container">
+      <div>
+        <div class="slds-card__header slds-grid">
+          <h2 class="gac-card-header slds-card__header-title">
+            <span>New Account</span>
+          </h2>
+        </div>
+        <template if:true={accountRecordTypes}>
+          <div class="gac-card-body slds-card__body slds-card__body_inner">
+            <template for:each={accountRecordTypes} for:item="recordType">
+              <div key={recordType.Name} class="slds-p-vertical_small">
+                <lightning-input type="radio" label={recordType.Name} name={recordType.Name} data-name={recordType.Name}
+                  data-id={recordType.Id} checked={recordType.isChecked} onchange={handleCheckRecordType}>
+                </lightning-input>
+                <template if:true={recordType.Description}>
+                  <p class="slds-p-left_large">{recordType.Description}</p>
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+        <template if:false={accountRecordTypes}>
+          <div class="gac-card-body slds-card__body slds-card__body_inner">{accountRecordTypesError}</div>
+        </template>
+      </div>
+      <footer class="slds-card__footer">
+        <lightning-button class="slds-p-around_medium" label="Cancel" variant="brand" onclick={handleClose}>
+        </lightning-button>
+        <lightning-button label="Next" variant="brand" class="slds-m-right_small" onclick={handleNextOpenModal}
+          disabled={isNextButtonDisabled}>
+        </lightning-button>
+      </footer>
+    </article>
+  </template>
+  <template if:true={isOpenModalWindow}>
+    <div class="slds-modal slds-fade-in-open">
+      <div if:true={showAlert}>
+        <c-custom-alert address={addressToAlert} onclosemodal={handleCloseAlert} icon-color={iconColor}>
+        </c-custom-alert>
+      </div>
+      <template if:true={isOpenCustomAlert}>
+        <div class="slds-modal slds-fade-in-open slds-backdrop modal-style">
+          <div class="slds-modal__container">
+            <!--                                    <div class="slds-modal__header"></div>-->
+            <div class="slds-modal__content">
+              <p class="slds-m-vertical_medium slds-align_absolute-center" style="font-size: 20px">
+                Do you want to leave?
+              </p>
+            </div>
+            <div class="slds-modal__footer">
+              <lightning-button label="No" class="slds-m-right_small" variant="brand" data-creation="No" title="No"
+                onclick={handleCloseModalAlert}>
+              </lightning-button>
+              <lightning-button label="Yes" class="slds-m-right_small" variant="brand" data-creation="Yes" title="Yes"
+                onclick={handleCloseModalAlert}>
+              </lightning-button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="nfwmdl-container slds-modal__container">
+        <div class="gac-modal-flex gac-height nfwmdl-container__border">
+          <template if:false={dataFieldSetsError}>
+            <div class="gac-modal-flex gac-height">
+              <div class="gac-header-height nfwmdl-header-not-community slds-modal__header">
+                <div class="slds-align_absolute-center slds-p-vertical_small nfwmdl-header-green-styles">
+                  <div>
+                    <h1>{windowLabel}</h1>
+                  </div>
+                </div>
+                <div if:false={showPlaceHolder}>
+                  <div class="nfwmdl-header-indicator-styles">
+                    <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                      <template for:each={stepsArray} for:item="step" for:index="index">
+                        <template if:true={step.active}>
+                          <lightning-progress-step label={step.stepName} value={step.value} key={step.stepName}
+                            onclick={showCurrentPage}>
+                          </lightning-progress-step>
+                        </template>
+                        <template if:false={step.active}>
+                          <lightning-progress-step class="niwm-progress-step" label={step.stepName} value={step.value}
+                            key={step.stepName} onclick={showCurrentPage}>
+                          </lightning-progress-step>
+                        </template>
+                      </template>
+                    </lightning-progress-indicator>
+                  </div>
+                </div>
+              </div>
+              <div class="gac-height gac-content-container gac-content-min-height slds-modal__content nam-modal-styles">
+                <template if:true={showLoading}>
+                  <div>
+                    <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass">
+                    </lightning-spinner>
+                  </div>
+                </template>
+                <div if:true={showPlaceHolder}>
+                  <div class="slds-align_absolute-center slds-p-top_x-large">
+                    <h1 style="font-size: 18px">
+                      Wrong RecordType. Please choose another RecordType or contact your system administrator.
+                    </h1>
+                  </div>
+                </div>
+                <div if:false={showPlaceHolder}>
+                  <lightning-record-edit-form object-api-name={objectApiName} record-type-id={currentRecordTypeId}
+                    related-account-id={relatedAccountId}>
+                    <template for:each={fieldsArray} for:item="stepFields">
+                      <div key={stepFields.stepName} class="slds-p-horizontal_medium">
+                        <template if:true={stepFields.isCurrentStep}>
+                          <template if:true={stepFields.stepName}>
+                            <div key={stepFields.stepName} class="nfwmdl-section-label">
+                              <h1>{stepFields.stepName}</h1>
+                            </div>
+                          </template>
+                          <div class="nfwmdl-section-container">
+                            <template for:each={stepFields.fields} for:item="field">
+                              <template if:false={field.isNotVisible}>
+                                <template if:true={field.isAddress}>
+                                  <template if:true={isPOBox}>
+                                    <template if:true={field.isPOBoxAddress}>
+                                      <!--                                      <lightning-input-field-->
+                                      <!--                                        key={field.name}-->
+                                      <!--                                        field-name={field.name}-->
+                                      <!--                                        data-name={field.name}-->
+                                      <!--                                        data-type={field.type}-->
+                                      <!--                                        class="nam-input-field"-->
+                                      <!--                                        value={field.value}-->
+                                      <!--                                        variant="label-stacked"-->
+                                      <!--                                        onchange={handleChangeField}-->
+                                      <!--                                        required={field.required}-->
+                                      <!--                                        aria-placeholder={field.pattern}-->
+                                      <!--                                      >-->
+                                      <!--                                      </lightning-input-field>-->
+                                      <lightning-input-address key={field.name} class="gac-input-address slds-col"
+                                        data-box="POBox" required address-label="Search PO Box Address"
+                                        street-label={field.streetLabel} city-label={field.cityLabel}
+                                        country-label={field.countryLabel} province-label={field.provinceLabel}
+                                        postal-code-label={field.postalCodeLabel} street={field.street}
+                                        city={field.city} country={field.country} province={field.state}
+                                        postal-code={field.postalCode} onchange={handleAddressInputChange}
+                                        address-lookup-label="" show-address-lookup autocomplete="off">
+                                      </lightning-input-address>
+                                    </template>
+                                  </template>
+                                  <template if:false={isPOBox}>
+                                    <template if:false={field.isPOBoxAddress}>
+                                      <lightning-input-address key={field.name} class="gac-input-address slds-col"
+                                        data-box="NotPOBox" required address-label="Search Address"
+                                        street-label={field.streetLabel} city-label={field.cityLabel}
+                                        country-label={field.countryLabel} province-label={field.provinceLabel}
+                                        postal-code-label={field.postalCodeLabel} street={field.street}
+                                        city={field.city} country={field.country} province={field.state}
+                                        postal-code={field.postalCode} onchange={handleAddressInputChange}
+                                        address-lookup-label="" show-address-lookup autocomplete="off">
+                                      </lightning-input-address>
+                                    </template>
+                                  </template>
+                                </template>
+                                <template if:false={field.isAddress}>
+                                  <template if:false={field.inputDisabled}>
+                                    <template if:false={field.isInput}>
+                                      <template if:true={field.isCheckbox}>
+                                        <lightning-input key={field.name} name={field.name} label={field.label}
+                                          type="checkbox" variant="label-stacked" data-name={field.name}
+                                          data-type={field.type} checked={field.value} onchange={handleChangeField}
+                                          required={field.required}>
+                                        </lightning-input>
+                                        <!--                                                                                <lightning-input-field key={field.name}-->
+                                        <!--                                                                                                       field-name={field.name}-->
+                                        <!--                                                                                                       data-name={field.name}-->
+                                        <!--                                                                                                       data-type={field.type}-->
+                                        <!--                                                                                                       class="nam-input-field"-->
+                                        <!--                                                                                                       checked={field.value}-->
+                                        <!--                                                                                                       variant="label-stacked"-->
+                                        <!--                                                                                                       onchange={handleChangeField}-->
+                                        <!--                                                                                                       required={field.required}-->
+                                        <!--                                                                                                       aria-placeholder={field.pattern}>-->
+                                        <!--                                                                                </lightning-input-field>-->
+                                      </template>
+                                      <template if:false={field.isCheckbox}>
+                                        <lightning-input-field key={field.name} field-name={field.name}
+                                          data-name={field.name} data-type={field.type} class="nam-input-field"
+                                          value={field.value} variant="label-stacked" onchange={handleChangeField}
+                                          required={field.required} aria-placeholder={field.pattern} autocomplete="off">
+                                        </lightning-input-field>
+                                      </template>
+                                    </template>
+                                    <template if:true={field.isInput}>
+                                      <!-- <template if:true={field.isTaxExemption}>
+                                                                                <lightning-combobox
+                                                                                        key={field.name}
+                                                                                        field-name={field.name}
+                                                                                        data-name={field.name}
+                                                                                        class="nam-input-field"
+                                                                                        name={field.name}
+                                                                                        label={field.label}
+                                                                                        value={field.value}
+                                                                                        options={taxExemptionPicklistValues}
+                                                                                        onchange={handleChangeField}
+                                                                                        required={field.required}
+                                                                                ></lightning-combobox>
+                                                                            </template> -->
+                                      <template if:false={field.isTaxExemption}>
+                                        <lightning-input key={field.name} field-name={field.name} data-name={field.name}
+                                          class="nam-input-field" name={field.name} type={field.type}
+                                          label={field.label} value={field.value} onchange={handleChangeField}
+                                          required={field.required} placeholder={field.placeholder}
+                                          pattern={field.pattern}
+                                          message-when-pattern-mismatch={field.patternErrorMessage} autocomplete="off">
+                                        </lightning-input>
+                                      </template>
+                                    </template>
+                                  </template>
+                                  <template if:true={field.inputDisabled}>
+                                    <template if:false={field.isInput}>
+                                      <template if:true={field.isCheckbox}>
+                                        <lightning-input key={field.name} name={field.name} label={field.label}
+                                          type="checkbox" variant="label-stacked" data-name={field.name}
+                                          data-type={field.type} checked={field.value} onchange={handleChangeField}
+                                          required={field.required}>
+                                        </lightning-input>
+                                        <!--                                                                                <lightning-input-field key={field.name}-->
+                                        <!--                                                                                                       field-name={field.name}-->
+                                        <!--                                                                                                       data-name={field.name}-->
+                                        <!--                                                                                                       data-type={field.type}-->
+                                        <!--                                                                                                       class="nam-input-field"-->
+                                        <!--                                                                                                       checked={field.value}-->
+                                        <!--                                                                                                       variant="label-stacked"-->
+                                        <!--                                                                                                       required={field.required} disabled-->
+                                        <!--                                                                                                       aria-placeholder={field.pattern}>-->
+                                        <!--                                                                                </lightning-input-field>-->
+                                      </template>
+                                      <template if:false={field.isCheckbox}>
+                                        <lightning-input-field key={field.name} field-name={field.name}
+                                          data-name={field.name} data-type={field.type} class="nam-input-field"
+                                          value={field.value} variant="label-stacked" required={field.required} disabled
+                                          aria-placeholder={field.pattern} autocomplete="off">
+                                        </lightning-input-field>
+                                      </template>
+                                    </template>
+                                    <template if:true={field.isInput}>
+                                      <template if:true={field.isTaxExemption}>
+                                        <lightning-combobox key={field.name} field-name={field.name}
+                                          data-name={field.name} class="nam-input-field" name={field.name}
+                                          label={field.label} value={field.value} options={taxExemptionPicklistValues}
+                                          onchange={handleChangeField} required={field.required}></lightning-combobox>
+                                      </template>
+                                      <template if:false={field.isTaxExemption}>
+                                        <lightning-input key={field.name} field-name={field.name} data-name={field.name}
+                                          class="nam-input-field" name={field.name} type={field.type}
+                                          label={field.label} value={field.value} required={field.required}
+                                          placeholder={field.placeholder} disabled pattern={field.pattern}
+                                          message-when-pattern-mismatch={field.patternErrorMessage} autocomplete="off">
+                                        </lightning-input>
+                                      </template>
+                                    </template>
+                                  </template>
+                                </template>
+                              </template>
+                            </template>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+                  </lightning-record-edit-form>
+                </div>
+              </div>
+              <div class="gac-footer-height slds-modal__footer nfwmdl-contact-wizard-footer">
+                <lightning-button label="Cancel" class="slds-m-right_small" type="cancel" variant="brand" title="Cancel"
+                  onclick={handleCloseModal}>
+                </lightning-button>
+                <template if:false={isFirstStep}>
+                  <lightning-button label="Back" title="Back" variant="brand" class="slds-m-right_small"
+                    onclick={handleBackStep}>
+                  </lightning-button>
+                </template>
+                <template if:true={isLastStep}>
+                  <lightning-button label="Submit" variant="brand" title="Submit" data-is-draft="false"
+                    onclick={handleSubmit} disabled={isNotValidFields}>
+                  </lightning-button>
+                </template>
+                <template if:false={isLastStep}>
+                  <lightning-button label="Next" variant="brand" title="Cancel" disabled={isNotValidFields}
+                    onclick={handleNextStep}></lightning-button>
+                </template>
+              </div>
+            </div>
+          </template>
+          <template if:true={dataFieldSetsError}>
+            <div class="gac-height gac-content-min-height slds-modal__content nam-modal-styles">
+              <div class="slds-p-around_large">{dataFieldSetsError}</div>
+            </div>
+          </template>
+          <template if:true={isOpenCustomContactCreationAlert}>
+            <div class="slds-modal slds-fade-in-open slds-backdrop modal-style">
+              <div class="slds-modal__container">
+                <!--                                    <div class="slds-modal__header"></div>-->
+                <div class="slds-modal__content">
+                  <p class="slds-m-vertical_medium slds-align_absolute-center" style="font-size: 20px">
+                    Do you want to create a contact?
+                  </p>
+                </div>
+                <div class="slds-modal__footer">
+                  <lightning-button label="No" class="slds-m-right_small" variant="brand" data-creation="No" title="No"
+                    onclick={handleCloseContactAlert}>
+                  </lightning-button>
+                  <lightning-button label="Yes" class="slds-m-right_small" variant="brand" data-creation="Yes"
+                    title="Yes" onclick={handleCloseContactAlert}>
+                  </lightning-button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+    <template if:true={isOpenFromListViewButton}>
+      <div class="slds-backdrop slds-backdrop--open"></div>
+    </template>
+  </template>
+  <template if:true={isAccountTaxExemption}>
+    <c-new-account-modal record-id={createdAccountId} parent-account-id-tax-exemption={createdAccountParentId}
+      is-app-tab={isAccountTaxExemption} is-account-tax-exemption={isAccountTaxExemption}
+      is-open-tax-exemption={isOpenTaxExemption} onclosetab={handleClose} onclosecomp={closeQuickActionComponent}>
+    </c-new-account-modal>
+  </template>
+</template>
