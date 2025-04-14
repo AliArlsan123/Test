@@ -1,7 +1,7 @@
 ({
   doInit: function (component, event, helper) {
     const recordId = component.get("v.recordId"),
-      sObjectName = component.get("v.sObjectName");
+      sObjectName = component.get("v.sObjectsName");
 
     if (sObjectName === "Account") {
       component.set("v.accountId", recordId);
