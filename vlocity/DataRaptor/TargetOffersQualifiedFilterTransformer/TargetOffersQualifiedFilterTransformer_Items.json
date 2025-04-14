@@ -1,0 +1,82 @@
+[
+    {
+        "FormulaExpression": "FILTER(LIST(RemoteAction1:records), 'category == \"Qualified\"')",
+        "FormulaResultPath": "filteredRecords",
+        "FormulaSequence": 1,
+        "GlobalKey": "TargetOffersQualifiedFilterTransformerCustoma00J1000002eEHHIA2Item0",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "TargetOffersQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "TargetOffersQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/TargetOffersQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Formula",
+        "OutputObjectName": "Formula",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "TargetOffersQualifiedFilterTransformerCustoma00J1000002eEHHIA2Item1",
+        "InputFieldName": "RemoteAction1:actions",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "TargetOffersQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "TargetOffersQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/TargetOffersQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "RemoteAction1:actions",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "DefaultValue": "[]",
+        "GlobalKey": "TargetOffersQualifiedFilterTransformerCustoma00J1000002eEHMIA2Item2",
+        "InputFieldName": "filteredRecords",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "TargetOffersQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "TargetOffersQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/TargetOffersQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldFormat": "List<Map>",
+        "OutputFieldName": "RemoteAction1:records",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "TargetOffersQualifiedFilterTransformerCustoma00J1000002eEHHIA2Item3",
+        "InputFieldName": "RemoteAction1:totalSize",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "TargetOffersQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "TargetOffersQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/TargetOffersQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "RemoteAction1:totalSize",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    }
+]

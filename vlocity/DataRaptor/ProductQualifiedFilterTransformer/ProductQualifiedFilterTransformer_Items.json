@@ -1,0 +1,82 @@
+[
+    {
+        "FormulaExpression": "FILTER(LIST(response2:result:records), 'category == \"' + qualifiedFilter + '\"')",
+        "FormulaResultPath": "filteredRecords",
+        "FormulaSequence": 1,
+        "GlobalKey": "ProductQualifiedFilterTransformerCustom3338",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "ProductQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "ProductQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/ProductQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Formula",
+        "OutputObjectName": "Formula",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "ProductQualifiedFilterTransformerCustom8968",
+        "InputFieldName": "response2:result:actions",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "ProductQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "ProductQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/ProductQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "response2:result:actions",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "DefaultValue": "[]",
+        "GlobalKey": "ProductQualifiedFilterTransformerCustom3659",
+        "InputFieldName": "filteredRecords",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "ProductQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "ProductQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/ProductQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldFormat": "List<Map>",
+        "OutputFieldName": "response2:result:records",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "ProductQualifiedFilterTransformerCustom6148",
+        "InputFieldName": "response2:result:totalSize",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "ProductQualifiedFilterTransformer",
+        "OmniDataTransformationId": {
+            "Name": "ProductQualifiedFilterTransformer",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/ProductQualifiedFilterTransformer",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "response2:result:totalSize",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    }
+]

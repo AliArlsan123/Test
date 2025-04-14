@@ -1,0 +1,18 @@
+{
+    "bulkRequestType": "bulkChange",
+    "memberType": "ServicePoint",
+    "products": [
+        {
+            "Name": "Iphone",
+            "PriceBookId": "01sLT000000eSNOYA2",
+            "PricebookEntryId": "01uLT000000TCtpYAG",
+            "ProductFamily": "TV",
+            "ProductId": "01tLT000000T2fxYAC",
+            "Quantity": 1,
+            "assetIds": [
+                "02iLT0000001xZ7YAI"
+            ]
+        }
+    ],
+    "timestamp": "MON 2"
+}
