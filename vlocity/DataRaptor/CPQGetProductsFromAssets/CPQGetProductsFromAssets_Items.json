@@ -1,0 +1,147 @@
+[
+    {
+        "FilterDataType": "ID",
+        "FilterGroup": 0,
+        "FilterOperator": "IN",
+        "FilterValue": "assetIds",
+        "GlobalKey": "c8ef9fad-fa58-4a36-b8a3-489287409517",
+        "InputFieldName": "Id",
+        "InputObjectName": "Asset",
+        "InputObjectQuerySequence": 1,
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Products",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "9a05353a-8508-4f8d-9fbb-2bb98b192811",
+        "InputFieldName": "Product2.Id",
+        "InputObjectName": "Asset",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "Asset",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "b59ea894-0a89-4f7f-98b0-c6006cc15efc",
+        "InputFieldName": "Product2.Name",
+        "InputObjectName": "Asset",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "Asset",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "d5b31e9c-3972-4fc4-9023-3424aad87b0c",
+        "InputFieldName": "%vlocity_namespace%__PriceListId__r.%vlocity_namespace%__Pricebook2Id__c",
+        "InputObjectName": "Asset",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "Products",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "91d3bf35-5017-463c-9471-5ac69302c15a",
+        "InputFieldName": "%vlocity_namespace%__PricebookEntryId__c",
+        "InputObjectName": "Asset",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "Products",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "dc04d2e1-39ea-4676-b95c-23d83d5dd8fb",
+        "InputFieldName": "ProductFamily",
+        "InputObjectName": "Asset",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "Products",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "f547ddf2-35ee-4c47-9e74-9eb458b169dc",
+        "InputFieldName": "Quantity",
+        "InputObjectName": "Asset",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetProductsFromAssets",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetProductsFromAssets",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetProductsFromAssets",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "Products",
+        "OutputObjectName": "Turbo Extract",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    }
+]

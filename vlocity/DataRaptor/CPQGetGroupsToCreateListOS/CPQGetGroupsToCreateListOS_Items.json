@@ -1,0 +1,220 @@
+[
+    {
+        "FormulaExpression": "CONCAT(\"Group of \", memberType)",
+        "FormulaResultPath": "GroupDescription",
+        "FormulaSequence": 1,
+        "GlobalKey": "CPQGetGroupsToCreateListOS9310339623755239",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Formula",
+        "OutputObjectName": "Formula",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "FormulaExpression": "IF(timestamp != null, CONCAT(products:Name,\" \",timestamp), products:Name)",
+        "FormulaResultPath": "products:Name",
+        "FormulaSequence": 2,
+        "GlobalKey": "CPQGetGroupsToCreateListOS2071363980003491",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Formula",
+        "OutputObjectName": "Formula",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS8715157835755514",
+        "InputFieldName": "Products:Product2:Name",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "groupsToCreate:Name",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS7824225873467658",
+        "InputFieldName": "Products:Product2:Id",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldFormat": "String",
+        "OutputFieldName": "groupsToCreate:groupDescription",
+        "OutputObjectName": "json",
+        "TransformValueMappings": "{}",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS08329629992218068",
+        "InputFieldName": "Products:Product2:Name",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldFormat": "String",
+        "OutputFieldName": "groupsToCreate:groupName",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "DefaultValue": "true",
+        "GlobalKey": "CPQGetGroupsToCreateListOS8691395536910724",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldFormat": "Boolean",
+        "OutputFieldName": "groupsToCreate:isGroupAssociatedWithCart",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS2921002516131255",
+        "InputFieldName": "memberType",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldFormat": "String",
+        "OutputFieldName": "groupsToCreate:memberType",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS4170002930190342",
+        "InputFieldName": "Products:Product2:Id",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "groupsToCreate:productId",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS9288050894422886",
+        "InputFieldName": "bulkRequestType",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "groupsToCreate:selectedAssetsCommonConfiguration:bulkRequestType",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS8545381267430043",
+        "InputFieldName": "products:ProductFamily",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "groupsToCreate:selectedAssetsCommonConfiguration:productFamily",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "CPQGetGroupsToCreateListOS4665532913909176",
+        "InputFieldName": "Products:Product2:Id",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CPQGetGroupsToCreateListOS",
+        "OmniDataTransformationId": {
+            "Name": "CPQGetGroupsToCreateListOS",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CPQGetGroupsToCreateListOS",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "groupsToCreate:selectedAssetsCommonConfiguration:productId",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    }
+]

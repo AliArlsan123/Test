@@ -1,0 +1,15 @@
+{
+    "qualifiedFilter": "Qualified",
+    "response": {
+        "result": {
+            "records": [
+                {
+                    "category": "Qualified"
+                },
+                {
+                    "category": "Disqualified"
+                }
+            ]
+        }
+    }
+}

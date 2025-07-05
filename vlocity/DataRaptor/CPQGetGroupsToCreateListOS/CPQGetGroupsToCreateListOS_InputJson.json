@@ -1,0 +1,22 @@
+{
+    "Products": [
+        {
+            "%vlocity_namespace%__PriceListId__c": "a41LT00000005e1YAA",
+            "%vlocity_namespace%__PriceListId__r": {
+                "%vlocity_namespace%__Pricebook2Id__c": "01sLT000000eSNOYA2",
+                "Id": "a41LT00000005e1YAA"
+            },
+            "%vlocity_namespace%__PricebookEntryId__c": "01uLT000000TCtpYAG",
+            "Id": "02iLT0000001xZ7YAI",
+            "Product2": {
+                "Id": "01tLT000000T2fxYAC",
+                "Name": "Iphone",
+                "RecordTypeId": "012LT000000M0TwYAK"
+            },
+            "Product2Id": "01tLT000000T2fxYAC",
+            "ProductFamily": "TV",
+            "Quantity": 1
+        }
+    ],
+    "memberType": "MemberType"
+}

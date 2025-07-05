@@ -1,0 +1,158 @@
+[
+    {
+        "FormulaExpression": "IF(isBulk == 'bulk', 'BulkRequest', '')",
+        "FormulaResultPath": "asyncOperation",
+        "FormulaSequence": 2,
+        "GlobalKey": "aca28efd-ba0b-4e48-aed4-9f99c82052e4",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Formula",
+        "OutputObjectName": "Formula",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "FormulaExpression": "IF(isBulk == 'bulk', 'EnterpriseQuote', 'StandardQuote')",
+        "FormulaResultPath": "quoteRecordType",
+        "FormulaSequence": 1,
+        "GlobalKey": "d8ede35d-e0a9-4aa1-9b0c-8e513838c879",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 0,
+        "OutputFieldName": "Formula",
+        "OutputObjectName": "Formula",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "fb31168a-b6bd-41bd-ad5c-7f0facd9036f",
+        "InputFieldName": "asyncOperation",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "%vlocity_namespace%__AsyncOperation__c",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "a3eaa870-55d1-4d41-908d-3616801d4eb4",
+        "InputFieldName": "createQuotePriceList",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "%vlocity_namespace%__pricelistid__c",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "75a3e3c7-4f46-4be7-aafb-094079f7a196",
+        "InputFieldName": "ContextId",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "AccountId",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "5f00c0a5-2e70-40e7-8cd3-7fd44fd0d189",
+        "InputFieldName": "opportunityId",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "OpportunityId",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "b14b5ca0-e096-4c38-ab32-d908c80c9971",
+        "InputFieldName": "quoteName",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "name",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    },
+    {
+        "GlobalKey": "0d8e5652-31df-4783-a6d5-47246d19a672",
+        "InputFieldName": "quoteRecordType",
+        "IsDisabled": false,
+        "IsRequiredForUpsert": false,
+        "IsUpsertKey": false,
+        "Name": "CreateQuoteRequestData",
+        "OmniDataTransformationId": {
+            "Name": "CreateQuoteRequestData",
+            "VlocityDataPackType": "VlocityMatchingKeyObject",
+            "VlocityMatchingRecordSourceKey": "OmniDataTransform/CreateQuoteRequestData",
+            "VlocityRecordSObjectType": "OmniDataTransform"
+        },
+        "OutputCreationSequence": 1,
+        "OutputFieldName": "recordType",
+        "OutputObjectName": "json",
+        "VlocityDataPackType": "SObject",
+        "VlocityRecordSObjectType": "OmniDataTransformItem"
+    }
+]
